@@ -1,7 +1,5 @@
 import { useState } from "react"
 import { ChoiceExercise as Ex } from "../../lib/lesson_gen"
-import { phrase, player } from "../../lib/player"
-import { TEMPO_BPM } from "../../lib/settings"
 import { ChoiceTiles } from "../choice_tiles"
 import { Score } from "../score"
 import { PlayButtons } from "./play_buttons"
@@ -21,9 +19,6 @@ export function ChoiceExercise({ exercise, settings, locked, onAnswer }: Exercis
     if (locked) return
     setPicked(choice)
     onAnswer(choice == exercise.answer)
-    if (exercise.kind == "readInterval" && exercise.played != undefined) {
-      player.playSequence(phrase(exercise.played), { bpm: TEMPO_BPM[settings.tempo] })
-    }
   }
 
   return (
@@ -32,7 +27,7 @@ export function ChoiceExercise({ exercise, settings, locked, onAnswer }: Exercis
       <div className="stage">
         <Score clef={exercise.clef} keySignature={exercise.keySignature} notes={exercise.notes}
           size="large" minBeats={exercise.notes.length == 0 ? 1 : undefined} />
-        {exercise.kind == "earScale" && exercise.played != undefined && (
+        {exercise.played != undefined && (
           <PlayButtons pitches={exercise.played} tempo={settings.tempo} />
         )}
       </div>

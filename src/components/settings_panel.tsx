@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { NamingSystem } from "music-lib/theory"
-import { phrase, player } from "../lib/player"
+import { playPhrase, player } from "../lib/player"
 import { parsePitches } from "../lib/music"
 import {
   MAX_EXERCISES, MAX_GOAL, MIN_EXERCISES, MIN_GOAL, NAMINGS, Settings, TEMPO_BPM, Tempo, TEMPOS, Theme,
@@ -30,7 +30,7 @@ export function SettingsPanel({ settings, theme, onChange, onTheme, onResetProgr
 
   const sample = (tempo = settings.tempo) => {
     player.volume = settings.volume
-    player.playSequence(phrase(parsePitches("C4 E4 G4")), { bpm: TEMPO_BPM[tempo] })
+    playPhrase(parsePitches("C4 E4 G4"), TEMPO_BPM[tempo])
   }
 
   return (

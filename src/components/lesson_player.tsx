@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { LessonRef } from "../course"
 import { Exercise, generateLesson, lessonMix } from "../lib/lesson_gen"
 import { parsePitches } from "../lib/music"
-import { player } from "../lib/player"
+import { player, stopPlaying, whenQuiet } from "../lib/player"
 import { Settings } from "../lib/settings"
 import { solution } from "../lib/solution"
 import { ChoiceExercise } from "./exercises/choice_exercise"
@@ -26,6 +26,7 @@ type Phase = "intro" | "exercises" | "result"
 
 const ADVANCE_DELAY = 1100 // ms a right answer is shown before moving on
 const SLIDE_OUT = 300 // ms; matches .exerciseSlide.leaving in the CSS
+const AFTER_SOUND = 350 // ms to wait after the notes played back have finished
 
 // LessonPlayer runs a lesson: the new notes to start with, then the exercises one at a
 // time, then the score.
@@ -38,6 +39,8 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
   const [feedback, setFeedback] = useState<boolean>()
   const [leaving, setLeaving] = useState(false)
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
+  // bumped whenever the lesson moves on, so a wait for a sound to finish can tell it's stale
+  const step = useRef(0)
 
   const exercises = useMemo(
     () => generateLesson(lesson, settings.exerciseCount, seed),
@@ -45,8 +48,9 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
   )
 
   useEffect(() => () => {
+    step.current++
     timers.current.forEach(clearTimeout)
-    player.stop()
+    stopPlaying()
   }, [])
 
   const later = (fn: () => void, ms: number) => {
@@ -69,12 +73,19 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
     setFeedback(correct)
     setResults(r => [...r, correct])
     if (correct) {
-      later(advance, ADVANCE_DELAY)
+      // move on once the right answer has been seen and any notes played back have finished
+      const at = step.current
+      const shown = new Promise<void>(resolve => later(resolve, ADVANCE_DELAY))
+      const heard = whenQuiet().then(() => new Promise<void>(resolve => later(resolve, AFTER_SOUND)))
+      Promise.all([shown, heard]).then(() => {
+        if (step.current == at) advance()
+      })
     }
   }
 
   const advance = () => {
-    player.stop()
+    step.current++
+    stopPlaying()
     setLeaving(true)
     later(() => {
       setLeaving(false)
@@ -95,6 +106,7 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
   }, [phase])
 
   const retry = () => {
+    step.current++
     timers.current.forEach(clearTimeout)
     setSeed(s => s + 1)
     start()
@@ -223,7 +235,7 @@ function LessonIntro({ lessonRef, naming, onStart, onQuit }: {
   lessonRef: LessonRef, naming: NamingSystem, onStart: () => void, onQuit: () => void,
 }): JSX.Element {
   const { lesson, isTest, chapter, lessonIndex } = lessonRef
-  useEffect(() => () => player.stop(), [])
+  useEffect(() => () => stopPlaying(), [])
   const items = introNotes(lessonRef)
 
   return (

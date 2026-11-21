@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { ReadNotesExercise as Ex, gradeNames } from "../../lib/lesson_gen"
-import { phrase, player } from "../../lib/player"
+import { AFTER_CHIME, playPhrase } from "../../lib/player"
 import { TEMPO_BPM } from "../../lib/settings"
 import { NoteKeypad } from "../note_keypad"
 import { Score } from "../score"
@@ -16,9 +16,9 @@ export function ReadNotesExercise({ exercise, settings, locked, onAnswer }: Exer
     if (locked) return
     const m = gradeNames(answer, notes)
     setMarks(m)
-    onAnswer(m.every(x => x))
     // hearing the notes once named ties the sound to the sight
-    player.playSequence(phrase(notes), { bpm: TEMPO_BPM[settings.tempo] })
+    playPhrase(notes, TEMPO_BPM[settings.tempo], AFTER_CHIME)
+    onAnswer(m.every(x => x))
   }
 
   // a single note with nothing to add to it is marked as soon as it's named

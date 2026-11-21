@@ -1,7 +1,7 @@
 // Keeps the app working offline. Every request goes to the network first, so a new
 // version is picked up as soon as it is there, and falls back to the copy kept from the
 // last time it was fetched.
-const CACHE = "learn-notation-v1";
+const CACHE = "learn-notation-v2";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

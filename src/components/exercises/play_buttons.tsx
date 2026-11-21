@@ -1,6 +1,6 @@
 import { Pitch } from "music-lib/theory"
 import { useEffect, useState } from "react"
-import { phrase, player } from "../../lib/player"
+import { playPhrase, stopPlaying } from "../../lib/player"
 import { TEMPO_BPM, Tempo } from "../../lib/settings"
 import { SpeakerIcon, TortoiseIcon } from "./icons"
 
@@ -12,7 +12,7 @@ export function PlayButtons({ pitches, tempo, autoplay = true }: { pitches: Pitc
 
   const play = (slow = false) => {
     setPlaying(true)
-    player.playSequence(phrase(pitches), { bpm: TEMPO_BPM[tempo] * (slow ? 0.6 : 1) }).then(() => setPlaying(false))
+    playPhrase(pitches, TEMPO_BPM[tempo] * (slow ? 0.6 : 1)).then(() => setPlaying(false))
   }
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function PlayButtons({ pitches, tempo, autoplay = true }: { pitches: Pitc
     const timer = setTimeout(() => play(), AUTOPLAY_DELAY)
     return () => {
       clearTimeout(timer)
-      player.stop()
+      stopPlaying()
     }
   }, [])
 

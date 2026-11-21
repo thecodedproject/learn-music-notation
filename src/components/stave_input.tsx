@@ -19,6 +19,8 @@ export interface StaveInputProps {
   // once answered, whether each slot was right
   marks?: boolean[]
   naming: NamingSystem
+  // whether to show the name of the note being dragged
+  showName?: boolean
   // called as a note is placed or moved, to sound it
   onSound?: (p: Pitch) => void
 }
@@ -30,7 +32,7 @@ const MIDDLE = 4
 // choose the note; let go to place it. A tap on a written note selects it, to nudge it a
 // step with the arrows or give it a sharp or flat.
 export function StaveInput(props: StaveInputProps): JSX.Element {
-  const { clef, keySignature, given, value, onChange, extent, accidentals, locked, marks, naming, onSound } = props
+  const { clef, keySignature, given, value, onChange, extent, accidentals, locked, marks, naming, showName = true, onSound } = props
   const [selected, setSelected] = useState(() => Math.max(0, value.findIndex(v => v == undefined)))
   const [dragging, setDragging] = useState<number>()
   const layoutRef = useRef<StaveLayout>()
@@ -205,7 +207,7 @@ export function StaveInput(props: StaveInputProps): JSX.Element {
         {!locked && sel != undefined && (
           <rect className="slotColumn" x={sel.x - Math.min(half, 22)} width={2 * Math.min(half, 22)} y={layout.top} height={layout.bottom - layout.top} rx={6} />
         )}
-        {draggingPitch != undefined && dragging != undefined && slots[dragging] && (
+        {showName && draggingPitch != undefined && dragging != undefined && slots[dragging] && (
           <g className="dragLabel">
             <rect x={slots[dragging].x - 17} y={layout.top + 2} width={34} height={20} rx={10} />
             <text x={slots[dragging].x} y={layout.top + 16}>{noteLabel(draggingPitch, naming)}</text>

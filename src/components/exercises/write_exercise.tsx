@@ -1,7 +1,7 @@
 import { NamingSystem, Pitch, intervalNumberName, midiNumber, noteLabel } from "music-lib/theory"
 import { useState } from "react"
 import { EarDictationExercise, WriteIntervalExercise, WriteNotesExercise, gradeWritten } from "../../lib/lesson_gen"
-import { phrase, player } from "../../lib/player"
+import { AFTER_CHIME, playPhrase, player } from "../../lib/player"
 import { TEMPO_BPM } from "../../lib/settings"
 import { StaveInput } from "../stave_input"
 import { PlayButtons } from "./play_buttons"
@@ -21,15 +21,17 @@ export function WriteExercise({ exercise, settings, locked, onAnswer }: Exercise
     if (locked) return
     const m = gradeWritten(written, targets, strict)
     setMarks(m)
-    onAnswer(m.every(x => x))
     if (exercise.kind != "writeNotes") {
       // play what was written, so a wrong note can be heard against the right one
-      player.playSequence(phrase([...given, ...written.filter((p): p is Pitch => p != undefined)]), { bpm })
+      playPhrase([...given, ...written.filter((p): p is Pitch => p != undefined)], bpm, AFTER_CHIME)
     }
+    onAnswer(m.every(x => x))
   }
 
+  // notes sound as they're placed only when naming them: an interval or a phrase heard
+  // could otherwise be found by ear, note by note
   const sound = (p: Pitch) => {
-    if (settings.playWhilePlacing) {
+    if (settings.playWhilePlacing && exercise.kind == "writeNotes") {
       player.playNote(midiNumber(p), 0.5)
     }
   }
@@ -55,6 +57,8 @@ export function WriteExercise({ exercise, settings, locked, onAnswer }: Exercise
           locked={locked}
           marks={marks}
           naming={settings.naming}
+          // the note's name as it's dragged would give a note-naming exercise away
+          showName={exercise.kind != "writeNotes"}
           onSound={sound}
         />
         {!locked && <p className="hintText">Drag up or down on the stave to choose each note.</p>}

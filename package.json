@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "music-lib": "github:thecodedproject/music-lib#v0.1.1",
+    "music-lib": "github:thecodedproject/music-lib#v0.1.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
