@@ -41,7 +41,7 @@ modes, triads and chord symbols, melody fragments from Bach, seventh chords, and
 ## Music theory, the stave and sound
 
 All come from [music-lib](https://github.com/thecodedproject/music-lib), shared with
-chord_almanac, installed from a tag of its repo. To work on the library alongside the app, point
+chord_almanac, installed from a tag of its repo (`github:thecodedproject/music-lib#v0.1.1`). To work on the library alongside the app, point
 `package.json` at a local checkout with `"music-lib": "link:../music-lib"` (and run `yarn build`
 in the library after changing it); remember to switch back, and bump the tag, before pushing.
 
