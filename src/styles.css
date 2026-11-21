@@ -1,0 +1,114 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* the colours of the page; everything coloured takes its colour from these */
+:root {
+  color-scheme: light;
+  --bg: #f7f8fa;
+  --card-bg: #ffffff;
+  --fg: #16181d;
+  --fg-muted: #5d6270;
+  --fg-faint: #a2a7b3;
+  --border: #dde0e6;
+  --hover-bg: #eef0f4;
+  --pressed-bg: #e4e7ec;
+  --accent: #2f6fed;
+  --accent-strong: #1f56c4;
+  --accent-soft: rgba(47, 111, 237, 0.1);
+  --good: #1fa463;
+  --good-bg: #dcf6e8;
+  --bad: #d93d3d;
+  --bad-bg: #fde3e3;
+  --gold: #f2a516;
+  --shadow: rgba(16, 24, 40, 0.16);
+  --focus: rgba(47, 111, 237, 0.55);
+  --score-ink: #16181d;
+  --score-highlight: #2f6fed;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #14161a;
+  --card-bg: #1d2026;
+  --fg: #eef0f4;
+  --fg-muted: #a5abb8;
+  --fg-faint: #5c6270;
+  --border: #343843;
+  --hover-bg: #23262e;
+  --pressed-bg: #2b2f38;
+  --accent: #5b8fff;
+  --accent-strong: #7aa5ff;
+  --accent-soft: rgba(91, 143, 255, 0.15);
+  --good: #3ccf86;
+  --good-bg: #163527;
+  --bad: #ff6b6b;
+  --bad-bg: #3d1d1f;
+  --gold: #ffbe3d;
+  --shadow: rgba(0, 0, 0, 0.6);
+  --focus: rgba(91, 143, 255, 0.6);
+  --score-ink: #e6e8ee;
+  --score-highlight: #5b8fff;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+html {
+  /* phones: no rubber band scrolling, no grey flash on tap, no zooming on double tap */
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+input {
+  user-select: text;
+  -webkit-user-select: text;
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}

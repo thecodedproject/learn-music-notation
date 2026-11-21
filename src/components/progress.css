@@ -1,0 +1,313 @@
+/* this week, on the home screen */
+
+.weekCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  padding: 18px;
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  border-radius: 18px;
+  background: var(--card-bg);
+  text-align: left;
+  transition: border-color 120ms, transform 80ms;
+}
+
+.weekCard:hover {
+  border-color: var(--accent);
+}
+
+.weekCard:active {
+  transform: translateY(2px);
+}
+
+.weekCardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.weekCardTitle {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.weekCardCount {
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+
+.weekCardCount strong {
+  color: var(--fg);
+  font-size: 22px;
+}
+
+.weekCardNote {
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+.goalMeter {
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--pressed-bg);
+  overflow: hidden;
+}
+
+.goalMeter span {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--accent);
+  transition: width 400ms ease-out;
+}
+
+.goalMeter.met span {
+  background: var(--good);
+}
+
+/* a week's days */
+
+.dayBars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.dayBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.dayBarPlot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 72px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dayBarFill {
+  display: block;
+  width: min(100%, 28px);
+  border-radius: 4px 4px 0 0;
+  background: var(--accent);
+}
+
+.dayBarValue {
+  margin-bottom: 3px;
+  color: var(--fg-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dayBarLabel {
+  color: var(--fg-faint);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dayBar.today .dayBarLabel {
+  color: var(--accent);
+}
+
+.dayBar.future .dayBarPlot {
+  border-bottom-style: dashed;
+}
+
+/* the progress page */
+
+.progressView {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 32px;
+}
+
+.progressView h1 {
+  margin-bottom: 4px;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+.progressPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 18px 18px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+}
+
+.weekNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.weekNav .iconButton {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.weekNav .iconButton:disabled {
+  opacity: 0.3;
+  background: none;
+}
+
+.weekNavTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.weekNavTitle strong {
+  font-size: 18px;
+}
+
+.weekNavTitle span {
+  color: var(--fg-muted);
+  font-size: 13px;
+}
+
+.weekTotal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+
+.weekTotal strong {
+  color: var(--fg);
+  font-size: 22px;
+}
+
+.weekTotalNote {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panelHead h2 {
+  font-size: 18px;
+}
+
+.segmented.small button {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* weeks against the goal */
+
+.weekPlot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 150px;
+  border-bottom: 1px solid var(--border);
+}
+
+.goalLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed var(--fg-faint);
+  pointer-events: none;
+}
+
+.goalLine span {
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--card-bg);
+  color: var(--fg-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.weekBar {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  align-items: flex-end;
+  border-radius: 4px 4px 0 0;
+}
+
+.weekBar:hover {
+  background: var(--hover-bg);
+}
+
+.weekBar.selected {
+  background: var(--accent-soft);
+}
+
+.weekBarFill {
+  display: block;
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: var(--accent);
+}
+
+.weekBar.met .weekBarFill {
+  background: var(--good);
+}
+
+.weekAxis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--fg-faint);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* totals */
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 12px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+}
+
+.stat strong {
+  font-size: 26px;
+}
+
+.stat span {
+  color: var(--fg-muted);
+  font-size: 13px;
+}

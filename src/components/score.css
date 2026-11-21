@@ -1,0 +1,36 @@
+.score {
+  display: flex;
+  justify-content: center;
+  color: var(--score-ink);
+  max-width: 100%;
+}
+
+.score svg {
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.score .note.ghost {
+  opacity: 0.22;
+}
+
+.score .note.selected {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.score .note.correct {
+  fill: var(--good);
+  stroke: var(--good);
+}
+
+.score .note.wrong {
+  fill: var(--bad);
+  stroke: var(--bad);
+}
+
+.score .note.given {
+  fill: var(--fg-muted);
+  stroke: var(--fg-muted);
+}

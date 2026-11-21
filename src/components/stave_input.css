@@ -1,0 +1,81 @@
+.staveInput {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  outline: none;
+  border-radius: 16px;
+  padding: 4px;
+}
+
+.staveInput:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+/* the stave takes drags itself, rather than scrolling the page */
+.staveInput .hitArea {
+  fill: transparent;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.staveInput.locked .hitArea {
+  cursor: default;
+}
+
+.staveInput svg {
+  touch-action: none;
+}
+
+.staveInput .slotColumn {
+  fill: var(--accent-soft);
+  stroke: none;
+}
+
+.staveInput .dragLabel rect {
+  fill: var(--accent);
+  stroke: none;
+}
+
+.staveInput .dragLabel text {
+  fill: #fff;
+  stroke: none;
+  font: 600 12px system-ui, sans-serif;
+  text-anchor: middle;
+}
+
+.staveTools {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.toolButton {
+  min-width: 52px;
+  min-height: 48px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toolButton:active:not(:disabled) {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.toolButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.toolButton.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}

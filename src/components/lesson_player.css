@@ -1,0 +1,561 @@
+.lessonPlayer,
+.lessonIntro,
+.lessonResult {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lessonTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 60px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--pressed-bg);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 8px;
+  background: var(--good);
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+  transition: width 400ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+/* exercises slide in from the right, and away to the left once done */
+
+.exerciseViewport {
+  position: relative;
+  flex: 1;
+  display: flex;
+  overflow-x: hidden;
+  /* room for the feedback bar */
+  padding-bottom: 140px;
+}
+
+.exerciseSlide {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  animation: slideIn 320ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.exerciseSlide.leaving {
+  transform: translateX(-110%);
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.5, 0, 0.8, 0.4), opacity 300ms;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(60%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exerciseSlide,
+  .exerciseSlide.leaving {
+    animation: none;
+    transition: opacity 200ms;
+    transform: none;
+  }
+}
+
+.exercise {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: 12px;
+  min-width: 0;
+}
+
+.exercisePrompt {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.exerciseAnswer {
+  display: flex;
+  flex-direction: column;
+}
+
+.exerciseFooter {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.exerciseFooter .primary {
+  flex: 1;
+}
+
+/* the stave (and any play buttons) an exercise asks about */
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.stage.compact .playBig {
+  width: 72px;
+  height: 72px;
+}
+
+.stage.compact .playBig svg {
+  width: 36px;
+  height: 36px;
+}
+
+.feedbackAnswer .score {
+  justify-content: flex-start;
+  margin-top: 6px;
+}
+
+/* listening */
+
+.listenStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.playButtons {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.playBig {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 5px 0 var(--accent-strong);
+  transition: transform 80ms;
+}
+
+.playBig svg {
+  width: 48px;
+  height: 48px;
+}
+
+.playBig:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--accent-strong);
+}
+
+.playBig.playing svg {
+  animation: pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.1); }
+}
+
+.playSlow {
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+  color: var(--accent);
+}
+
+.playSlow svg {
+  width: 30px;
+  height: 30px;
+}
+
+.codeCard {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 22px 16px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+}
+
+.textAnswer {
+  width: 100%;
+  min-height: 64px;
+  padding: 0 18px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.textAnswer:focus {
+  border-color: var(--accent);
+}
+
+.textAnswer::placeholder {
+  color: var(--fg-faint);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* the English to write or tap */
+
+.englishCard {
+  align-self: center;
+  padding: 16px 28px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+/* tapping */
+
+.tapHint {
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+  align-items: center;
+}
+
+.tapOutput {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px 28px;
+  min-height: 64px;
+  padding: 12px;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+.tapOutputHint {
+  align-self: center;
+  color: var(--fg-faint);
+  font-size: 15px;
+}
+
+.tapWord {
+  display: flex;
+  gap: 14px;
+}
+
+.tapLetter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tapLetterText {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.tapKeyWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.tapKey {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  box-shadow: 0 8px 0 var(--border), 0 12px 24px var(--shadow);
+  touch-action: none;
+  transition: transform 40ms, box-shadow 40ms;
+}
+
+.tapKeyKnob {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 40ms, box-shadow 40ms;
+}
+
+.tapKey.down {
+  transform: translateY(6px);
+  box-shadow: 0 2px 0 var(--border), 0 4px 10px var(--shadow);
+}
+
+.tapKey.down .tapKeyKnob {
+  transform: scale(0.92);
+  box-shadow: 0 0 24px var(--accent);
+}
+
+.tapKeyLabel {
+  color: var(--fg-faint);
+  font-size: 13px;
+}
+
+/* right or wrong */
+
+.feedbackBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  padding: 18px max(16px, env(safe-area-inset-left)) calc(18px + env(safe-area-inset-bottom));
+  animation: feedbackUp 220ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.feedbackBar.correct {
+  background: var(--good-bg);
+  color: var(--good);
+}
+
+.feedbackBar.wrong {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.feedbackBar.wrong .primary {
+  background: var(--bad);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.feedbackInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 648px;
+  margin: 0 auto;
+}
+
+.feedbackText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.feedbackText strong {
+  font-size: 22px;
+}
+
+.feedbackAnswer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  color: var(--fg);
+}
+
+.feedbackMeaning {
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+@keyframes feedbackUp {
+  from { transform: translateY(100%); }
+}
+
+@media (max-width: 420px) {
+  .feedbackInner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* before the lesson */
+
+.lessonIntroBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 24px;
+}
+
+.lessonIntroBody h1 {
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+.lessonIntroText {
+  margin-bottom: 12px;
+  color: var(--fg-muted);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.lessonIntroBody .introItems {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.introItem {
+  position: relative;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-height: 108px;
+  padding: 16px 12px;
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  transition: border-color 120ms;
+}
+
+.introItem:hover,
+.introItem.playing {
+  border-color: var(--accent);
+}
+
+.introItemText {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.introItemMeaning {
+  color: var(--fg-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.introItemPlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: var(--fg-faint);
+}
+
+.introItemPlay svg {
+  width: 18px;
+  height: 18px;
+}
+
+.lessonIntroFooter,
+.resultActions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: auto;
+  padding: 16px 0 24px;
+}
+
+/* the score */
+
+.lessonResult {
+  text-align: center;
+}
+
+.resultBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 48px;
+}
+
+.resultBody h1 {
+  font-size: 32px;
+}
+
+.resultMessage {
+  max-width: 360px;
+  color: var(--fg-muted);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.resultScore {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 12px 0;
+  animation: pop 500ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.scoreRing {
+  width: 100%;
+  height: 100%;
+}
+
+.scoreRingTrack {
+  fill: none;
+  stroke: var(--pressed-bg);
+  stroke-width: 12;
+}
+
+.scoreRingFill {
+  fill: none;
+  stroke: var(--fg-faint);
+  stroke-width: 12;
+  stroke-linecap: round;
+  animation: ringFill 900ms ease-out;
+}
+
+.resultScore.level1 .scoreRingFill {
+  stroke: var(--accent);
+}
+
+.resultScore.level2 .scoreRingFill {
+  stroke: var(--good);
+}
+
+.resultScore.level3 .scoreRingFill {
+  stroke: var(--gold);
+}
+
+.resultPercent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  font-weight: 800;
+}
+
+@keyframes pop {
+  from { transform: scale(0.5); opacity: 0; }
+}
+
+@keyframes ringFill {
+  from { stroke-dashoffset: 327; }
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.lessonIntroBody .introItems li {
+  min-width: 0;
+}
+

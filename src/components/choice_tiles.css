@@ -1,0 +1,47 @@
+.choiceTiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+  gap: 8px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.choiceTiles.wide {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.choiceTile {
+  min-height: 56px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.choiceTile:active:not(:disabled) {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.choiceTile:disabled {
+  cursor: default;
+}
+
+.choiceTile.correct {
+  border-color: var(--good);
+  background: var(--good-bg);
+}
+
+.choiceTile.wrong {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+.choiceTile.faded {
+  opacity: 0.45;
+}

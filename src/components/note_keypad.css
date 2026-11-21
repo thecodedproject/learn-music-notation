@@ -1,0 +1,92 @@
+.noteKeypad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.answerBoxes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.answerBox {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.answerBox.empty {
+  border-style: dashed;
+  cursor: default;
+}
+
+.answerBox.current {
+  border-color: var(--accent);
+  border-style: solid;
+}
+
+.answerBox.correct {
+  border-color: var(--good);
+  background: var(--good-bg);
+}
+
+.answerBox.wrong {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+.letterKeys,
+.accidentalKeys {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.accidentalKeys {
+  grid-template-columns: repeat(2, minmax(0, 72px));
+  justify-content: center;
+}
+
+.letterKey {
+  min-height: 56px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.letterKeys.solfege .letterKey {
+  font-size: 15px;
+}
+
+.letterKey:active:not(:disabled) {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.letterKey:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.letterKey.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
