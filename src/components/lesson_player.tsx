@@ -3,8 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { LessonRef } from "../course"
 import { Exercise, generateLesson, lessonMix } from "../lib/lesson_gen"
 import { parsePitches } from "../lib/music"
-import { player, stopPlaying, whenQuiet } from "../lib/player"
-import { Settings } from "../lib/settings"
+import { playPhrase, player, stopPlaying } from "../lib/player"
+import { Settings, TEMPO_BPM } from "../lib/settings"
 import { solution } from "../lib/solution"
 import { ChoiceExercise } from "./exercises/choice_exercise"
 import { ReadNotesExercise } from "./exercises/read_notes_exercise"
@@ -26,7 +26,6 @@ type Phase = "intro" | "exercises" | "result"
 
 const ADVANCE_DELAY = 1100 // ms a right answer is shown before moving on
 const SLIDE_OUT = 300 // ms; matches .exerciseSlide.leaving in the CSS
-const AFTER_SOUND = 350 // ms to wait after the notes played back have finished
 
 // LessonPlayer runs a lesson: the new notes to start with, then the exercises one at a
 // time, then the score.
@@ -37,6 +36,8 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
   const [index, setIndex] = useState(0)
   const [results, setResults] = useState<boolean[]>([])
   const [feedback, setFeedback] = useState<boolean>()
+  // answered, and playing the notes back before the answer is revealed
+  const [pending, setPending] = useState(false)
   const [leaving, setLeaving] = useState(false)
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
   // bumped whenever the lesson moves on, so a wait for a sound to finish can tell it's stale
@@ -65,21 +66,31 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
     setPhase("exercises")
   }
 
-  const answer = (correct: boolean) => {
-    if (feedback != undefined) {
+  const answer = (correct: boolean, playBack?: Pitch[]) => {
+    if (feedback != undefined || pending) {
       return
     }
+    if (playBack == undefined || playBack.length == 0) {
+      reveal(correct)
+      return
+    }
+    // play the notes back first, then say whether the answer was right
+    setPending(true)
+    const at = step.current
+    playPhrase(playBack, TEMPO_BPM[settings.tempo]).then(() => {
+      if (step.current == at) reveal(correct)
+    })
+  }
+
+  const reveal = (correct: boolean) => {
+    setPending(false)
     player.chime(correct)
     setFeedback(correct)
     setResults(r => [...r, correct])
     if (correct) {
-      // move on once the right answer has been seen and any notes played back have finished
+      // unless Continue has been tapped already
       const at = step.current
-      const shown = new Promise<void>(resolve => later(resolve, ADVANCE_DELAY))
-      const heard = whenQuiet().then(() => new Promise<void>(resolve => later(resolve, AFTER_SOUND)))
-      Promise.all([shown, heard]).then(() => {
-        if (step.current == at) advance()
-      })
+      later(() => step.current == at && advance(), ADVANCE_DELAY)
     }
   }
 
@@ -107,6 +118,7 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
 
   const retry = () => {
     step.current++
+    setPending(false)
     timers.current.forEach(clearTimeout)
     setSeed(s => s + 1)
     start()
@@ -148,7 +160,8 @@ export function LessonPlayer({ lessonRef, settings, onFinish, onQuit, onNext }: 
             <ExerciseView
               exercise={exercise}
               settings={settings}
-              locked={feedback != undefined}
+              locked={pending || feedback != undefined}
+              revealed={feedback != undefined}
               onAnswer={answer}
             />
           </div>

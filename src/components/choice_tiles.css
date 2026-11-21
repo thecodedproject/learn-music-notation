@@ -45,3 +45,7 @@
 .choiceTile.faded {
   opacity: 0.45;
 }
+
+.choiceTile.picked {
+  border-color: var(--accent);
+}

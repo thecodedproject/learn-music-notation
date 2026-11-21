@@ -64,7 +64,7 @@ export function SettingsPanel({ settings, theme, onChange, onTheme, onResetProgr
         </section>
 
         <section className="setting">
-          <span className="settingLabel">Sound notes as you place them</span>
+          <span className="settingLabel">Sound notes as you name or place them</span>
           <div className="segmented">
             {[true, false].map(on => (
               <button key={String(on)} type="button" className={settings.playWhilePlacing == on ? "selected" : ""} onClick={() => onChange({ playWhilePlacing: on })}>

@@ -1,8 +1,7 @@
 import { NamingSystem, Pitch, intervalNumberName, midiNumber, noteLabel } from "music-lib/theory"
 import { useState } from "react"
 import { EarDictationExercise, WriteIntervalExercise, WriteNotesExercise, gradeWritten } from "../../lib/lesson_gen"
-import { AFTER_CHIME, playPhrase, player } from "../../lib/player"
-import { TEMPO_BPM } from "../../lib/settings"
+import { player } from "../../lib/player"
 import { StaveInput } from "../stave_input"
 import { PlayButtons } from "./play_buttons"
 import { ExerciseProps } from "./types"
@@ -11,21 +10,19 @@ type Ex = WriteNotesExercise | WriteIntervalExercise | EarDictationExercise
 
 // WriteExercise asks for notes to be written on the stave: notes named, the note an
 // interval from one given, or notes heard after one given
-export function WriteExercise({ exercise, settings, locked, onAnswer }: ExerciseProps<Ex>): JSX.Element {
+export function WriteExercise({ exercise, settings, locked, revealed, onAnswer }: ExerciseProps<Ex>): JSX.Element {
   const { given, targets, strict } = describe(exercise)
   const [written, setWritten] = useState<(Pitch | undefined)[]>(() => targets.map(() => undefined))
   const [marks, setMarks] = useState<boolean[]>()
-  const bpm = TEMPO_BPM[settings.tempo]
 
   const check = () => {
     if (locked) return
     const m = gradeWritten(written, targets, strict)
     setMarks(m)
-    if (exercise.kind != "writeNotes") {
-      // play what was written, so a wrong note can be heard against the right one
-      playPhrase([...given, ...written.filter((p): p is Pitch => p != undefined)], bpm, AFTER_CHIME)
-    }
-    onAnswer(m.every(x => x))
+    // play what was written before finding out, so it can be heard against what was meant
+    onAnswer(m.every(x => x), exercise.kind == "writeNotes"
+      ? undefined
+      : [...given, ...written.filter((p): p is Pitch => p != undefined)])
   }
 
   // notes sound as they're placed only when naming them: an interval or a phrase heard
@@ -55,7 +52,7 @@ export function WriteExercise({ exercise, settings, locked, onAnswer }: Exercise
           extent={exercise.extent}
           accidentals={exercise.kind == "writeInterval" ? false : exercise.accidentals}
           locked={locked}
-          marks={marks}
+          marks={revealed ? marks : undefined}
           naming={settings.naming}
           // the note's name as it's dragged would give a note-naming exercise away
           showName={exercise.kind != "writeNotes"}

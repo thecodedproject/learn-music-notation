@@ -4,16 +4,19 @@ interface Props {
   choices: string[]
   onPick: (choice: string) => void
   locked: boolean
+  revealed: boolean // whether to show which was right
   picked?: string // once answered, the one chosen
   answer?: string // once answered, the right one
 }
 
 // ChoiceTiles answers a question with one of a few choices, a tap each
-export function ChoiceTiles({ choices, onPick, locked, picked, answer }: Props): JSX.Element {
+export function ChoiceTiles({ choices, onPick, locked, revealed, picked, answer }: Props): JSX.Element {
   return (
     <div className={`choiceTiles${choices.some(c => c.length > 4) ? " wide" : ""}`}>
       {choices.map(c => {
-        const state = !locked ? "" : c == answer ? " correct" : c == picked ? " wrong" : " faded"
+        const state = revealed
+          ? c == answer ? " correct" : c == picked ? " wrong" : " faded"
+          : locked && c == picked ? " picked" : ""
         return (
           <button key={c} type="button" className={`choiceTile${state}`} onClick={() => onPick(c)} disabled={locked}>
             {c}

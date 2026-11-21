@@ -12,13 +12,14 @@ const PROMPTS: Record<Ex["kind"], string> = {
 }
 
 // ChoiceExercise is answered by picking one of a few named choices: an interval, a key
-export function ChoiceExercise({ exercise, settings, locked, onAnswer }: ExerciseProps<Ex>): JSX.Element {
+export function ChoiceExercise({ exercise, settings, locked, revealed, onAnswer }: ExerciseProps<Ex>): JSX.Element {
   const [picked, setPicked] = useState<string>()
 
   const pick = (choice: string) => {
     if (locked) return
     setPicked(choice)
-    onAnswer(choice == exercise.answer)
+    // hear the interval once more before finding out
+    onAnswer(choice == exercise.answer, exercise.kind == "readInterval" ? exercise.played : undefined)
   }
 
   return (
@@ -32,7 +33,7 @@ export function ChoiceExercise({ exercise, settings, locked, onAnswer }: Exercis
         )}
       </div>
       <div className="exerciseAnswer">
-        <ChoiceTiles choices={exercise.choices} onPick={pick} locked={locked} picked={picked} answer={exercise.answer} />
+        <ChoiceTiles choices={exercise.choices} onPick={pick} locked={locked} revealed={revealed} picked={picked} answer={exercise.answer} />
       </div>
     </div>
   )
